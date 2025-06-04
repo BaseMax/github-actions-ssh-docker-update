@@ -109,6 +109,6 @@ MIT License — feel free to use and adapt.
 
 ## 🙋‍♂️ Author
 
-Ali (BaseMax)
+Max Base (Ali)
 
-🔗 GitHub: @BaseMax
+🔗 GitHub: [@BaseMax](https://github.com/basemax)
