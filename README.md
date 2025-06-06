@@ -51,10 +51,10 @@ Go to your repo → **Settings** → **Secrets and variables** → **Actions** �
 
 ---
 
-## 📦 GitHub Actions Workflow (`.github/workflows/deploy.yml`)
+## 📦 GitHub Actions Workflow (`.github/workflows/deploy-docker-ssh-key.yml`)
 
 ```yaml
-name: Deploy via SSH
+name: Deploy via SSH by Key
 
 on:
   push:
@@ -78,9 +78,41 @@ jobs:
         run: |
           ssh -e ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ${{ secrets.PROJECT_PATH }}
-            git pull origin main
-            docker compose pull
-            docker compose up -d
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
+            docker compose up --build -d
+          EOF
+```
+
+## 📦 GitHub Actions Workflow (`.github/workflows/deploy-docker-ssh-password.yml`)
+
+```yaml
+name: Deploy via SSH by Password
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Deploy to Server via SSH
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -e ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
+            cd ${{ secrets.PROJECT_DIRECTORY }}
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
+            docker compose up --build -d
           EOF
 ```
 
