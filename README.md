@@ -47,7 +47,7 @@ Go to your repo → **Settings** → **Secrets and variables** → **Actions** �
 | `SSH_USERNAME`   | SSH user with access to the project directory   |
 | `SSH_KEY`        | Private SSH key (no passphrase)                 |
 | `SSH_PASSWORD`   | SSH Passphrase                                  |
-| `PROJECT_PATH`   | Absolute path of the Docker Compose project     |
+| `PROJECT_DIRECTORY`   | Absolute path of the Docker Compose project     |
 
 ---
 
@@ -77,7 +77,7 @@ jobs:
       - name: Connect and Deploy
         run: |
           ssh -e ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd ${{ secrets.PROJECT_PATH }}
+            cd ${{ secrets.PROJECT_DIRECTORY }}
             git fetch origin main
             git reset --hard origin/main
             git clean -fd
