@@ -43,8 +43,10 @@ Go to your repo → **Settings** → **Secrets and variables** → **Actions** �
 | Secret Name     | Description                                     |
 |------------------|-------------------------------------------------|
 | `SSH_HOST`       | IP or domain of your remote server              |
+| `SSH_PORT`       | IP or domain of your remote server              |
 | `SSH_USERNAME`   | SSH user with access to the project directory   |
 | `SSH_KEY`        | Private SSH key (no passphrase)                 |
+| `SSH_PASSWORD`   | SSH Passphrase                                  |
 | `PROJECT_PATH`   | Absolute path of the Docker Compose project     |
 
 ---
@@ -74,7 +76,7 @@ jobs:
 
       - name: Connect and Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -e ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ${{ secrets.PROJECT_PATH }}
             git pull origin main
             docker compose pull
